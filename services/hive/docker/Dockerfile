@@ -36,6 +36,7 @@ COPY --chown=1000:1000 --from=hive-base /usr/local/bin/entrypoint.sh /usr/local/
 RUN set -ex && \
   wget --quiet ${PSQL_JDBC_DRIVER} -P ${HIVE_HOME}/lib/ && \
   wget --quiet ${MYSQL_JDBC_DRIVER} -P ${HIVE_HOME}/lib/ &&\
+  chown -R ${CONTAINER_USER}:${CONTAINER_USER} ${HIVE_HOME} &&\
 	chmod 0755 /usr/local/bin/startup.sh && \
 	chmod 0755 /usr/local/bin/entrypoint.sh
 
