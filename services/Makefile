@@ -5,7 +5,8 @@ DOCKER_IMAGES = \
 	zeppelin \
 	presto \
 	shell \
-	jupyter
+	jupyter \
+	hive
 
 DOCKER_USER ?= "kubelytics"
 
@@ -17,6 +18,7 @@ JUPYTER_MINICONDA_VERSION ?= 4.5.12
 JUPYTER_VERSION ?= 0.9.4
 PRESTO_VERSION ?= 0.206
 TTYD_VERSION ?= 1.4.0
+HIVE_VERSION ?= 2.3.3
 
 docker-images: $(DOCKER_IMAGES)
 	@echo Building images completed
@@ -108,5 +110,15 @@ shell:
         --build-arg TTYD_VERSION=$(TTYD_VERSION) \
         --tag $(DOCKER_USER)/shell:$(HADOOP_VERSION)-$(SPARK_VERSION)-$(PRESTO_VERSION) .
 	$(eval READY_IMAGES += $(DOCKER_USER)/shell:$(HADOOP_VERSION)-$(SPARK_VERSION)-$(PRESTO_VERSION))
+
+hive:
+		@echo Building hive image $(DOCKER_USER)/hive:$(HIVE_VERSION)-$(HADOOP_VERSION)
+		@cd hive/docker && \
+		docker build \
+	        --build-arg DOCKER_USER=$(DOCKER_USER) \
+	        --build-arg HADOOP_VERSION=$(HADOOP_VERSION) \
+	        --build-arg HIVE_VERSION="hive-$(HIVE_VERSION)" \
+	        --tag $(DOCKER_USER)/hive:$(HIVE_VERSION)-$(HADOOP_VERSION) .
+		$(eval READY_IMAGES += $(DOCKER_USER)/hive:$(HIVE_VERSION)-$(HADOOP_VERSION))
 
 .PHONY: $(DOCKER_IMAGES)
