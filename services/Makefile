@@ -6,7 +6,8 @@ DOCKER_IMAGES = \
 	presto \
 	shell \
 	jupyter \
-	hive
+	hive \
+	postgresql
 
 DOCKER_USER ?= "kubelytics"
 
@@ -19,6 +20,7 @@ JUPYTER_VERSION ?= 0.9.4
 PRESTO_VERSION ?= 0.206
 TTYD_VERSION ?= 1.4.0
 HIVE_VERSION ?= 2.3.3
+POSTGRES_VERSION ?= 11.1.0
 
 docker-images: $(DOCKER_IMAGES)
 	@echo Building images completed
@@ -120,5 +122,14 @@ hive:
 	        --build-arg HIVE_VERSION="hive-$(HIVE_VERSION)" \
 	        --tag $(DOCKER_USER)/hive:$(HIVE_VERSION)-$(HADOOP_VERSION) .
 		$(eval READY_IMAGES += $(DOCKER_USER)/hive:$(HIVE_VERSION)-$(HADOOP_VERSION))
+
+postgresql:
+		@echo Building postgres image $(DOCKER_USER)/postgresql:$(POSTGRES_VERSION)
+		@cd postgresql/docker && \
+		docker build \
+	        --build-arg DOCKER_USER=$(DOCKER_USER) \
+	        --build-arg POSTGRES_VERSION="$(POSTGRES_VERSION)" \
+	        --tag $(DOCKER_USER)/postgresql:$(POSTGRES_VERSION) .
+		$(eval READY_IMAGES += $(DOCKER_USER)/postgresql:$(POSTGRES_VERSION))
 
 .PHONY: $(DOCKER_IMAGES)
