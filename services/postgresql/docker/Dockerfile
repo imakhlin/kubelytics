@@ -17,10 +17,11 @@ ENV POSTGRES_UID=${POSTGRES_UID:-1001} \
     POSTGRES_UNAME=${POSTGRES_UNAME:-"postgres"} \
     PG_HOME=${PG_HOME:-"/opt/bitnami/postgresql"}
 
-ENV PGDATA=$PG_HOME/data
+ENV PGDATA=$PG_HOME/data \
+    PATH=$PATH:$PG_HOME/bin
 
 # Create iguazio user/group
-RUN set -ex; \
+RUN set -e; \
     groupadd -g $POSTGRES_UID $POSTGRES_UNAME; \
     useradd -m -k /etc/skel/ -u $POSTGRES_UID -g $POSTGRES_UNAME -d /home/$POSTGRES_UNAME -s /bin/bash $POSTGRES_UNAME; \
     echo "alias ll='ls -la'" >> /home/$POSTGRES_UNAME/.bash_aliases; \
