@@ -18,3 +18,6 @@
 *.zip
 *.z
 *.bz
+
+# Kubernetes cache
+.kube/

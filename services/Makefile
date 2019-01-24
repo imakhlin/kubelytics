@@ -19,7 +19,7 @@ JUPYTER_MINICONDA_VERSION ?= 4.5.12
 JUPYTER_VERSION ?= 0.9.4
 PRESTO_VERSION ?= 0.206
 TTYD_VERSION ?= 1.4.0
-HIVE_VERSION ?= 2.3.3
+HIVE_VERSION ?= 2.3.2
 POSTGRES_VERSION ?= 11.1.0
 
 docker-images: $(DOCKER_IMAGES)
@@ -119,7 +119,7 @@ hive:
 		docker build \
 	        --build-arg DOCKER_USER=$(DOCKER_USER) \
 	        --build-arg HADOOP_VERSION=$(HADOOP_VERSION) \
-	        --build-arg HIVE_VERSION="hive-$(HIVE_VERSION)" \
+	        --build-arg HIVE_VERSION="$(HIVE_VERSION)" \
 	        --tag $(DOCKER_USER)/hive:$(HIVE_VERSION)-$(HADOOP_VERSION) .
 		$(eval READY_IMAGES += $(DOCKER_USER)/hive:$(HIVE_VERSION)-$(HADOOP_VERSION))
 
