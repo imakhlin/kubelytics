@@ -15,12 +15,26 @@ ENV NAMI_LOG_LEVEL=${NAMI_LOG_LEVEL}
 # Note, PGDATA should refer to the mount point.
 ENV PGDATA=/bitnami/postgresql
 
+RUN echo "Running as user: $(id -u):$(id -g)"
+
 USER root
 
 # Create iguazio user/group
 RUN set -ex && \
     groupadd -g $POSTGRES_UID $POSTGRES_UNAME && \
-    useradd -u $POSTGRES_UID -g $POSTGRES_UNAME --create-home -d /home/$POSTGRES_UNAME -s /bin/bash $POSTGRES_UNAME && \
-    echo "alias ll='ls -la'" >> /home/$POSTGRES_UNAME/.bash_aliases && \
-    chown -R $POSTGRES_UID:$POSTGRES_GID /home/$POSTGRES_UNAME && \
-    chown -R $POSTGRES_UID:$POSTGRES_GID /opt/bitnami/postgresql
+    useradd --uid $POSTGRES_UID --gid $POSTGRES_UNAME --home /home/$POSTGRES_UNAME --shell /bin/bash --create-home $POSTGRES_UNAME
+
+RUN chown -R $POSTGRES_UID:$POSTGRES_GID /home/$POSTGRES_UNAME && \
+    chown -R $POSTGRES_UID:$POSTGRES_GID /opt/bitnami && \
+    chown -R $POSTGRES_UID:$POSTGRES_GID /bitnami/postgresql && \
+    chown -R $POSTGRES_UID:$POSTGRES_GID /.nami && \
+    mkdir $PGDATA/data && \
+    chown -R $POSTGRES_UID:$POSTGRES_GID $PGDATA
+
+USER $POSTGRES_UID
+
+ENV HOME /home/$POSTGRES_UNAME
+
+RUN set -x && \
+    echo "alias ll='ls -lhaG'" >> $HOME/.bash_aliases && \
+    . $HOME/.bash_aliases
