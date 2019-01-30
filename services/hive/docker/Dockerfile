@@ -22,10 +22,10 @@ COPY --chown=1000:1000 --from=hive-base /opt/hive $HIVE_HOME
 COPY --chown=1000:1000 --from=hive-base /usr/local/bin/startup.sh /usr/local/bin/startup.sh
 COPY --chown=1000:1000 --from=hive-base /usr/local/bin/entrypoint.sh /usr/local/bin/entrypoint.sh
 
-ADD "https://jdbc.postgresql.org/download/postgresql-${PSQL_JDBC_VERSION}.jar" ${HIVE_HOME}/lib/
-ADD "https://downloads.mariadb.com/Connectors/java/connector-java-${MYSQL_JDBC_VERSION}/mariadb-java-client-${MYSQL_JDBC_VERSION}.jar" ${HIVE_HOME}/lib/
-
-RUN chown -R ${CONTAINER_USER}:${CONTAINER_USER} ${HIVE_HOME}
+RUN set -e && \
+    wget --quiet "https://jdbc.postgresql.org/download/postgresql-${PSQL_JDBC_VERSION}.jar" -P ${HIVE_HOME}/lib/ && \
+    wget --quiet "https://downloads.mariadb.com/Connectors/java/connector-java-${MYSQL_JDBC_VERSION}/mariadb-java-client-${MYSQL_JDBC_VERSION}.jar" -P ${HIVE_HOME}/lib/ &&\
+    chown -R ${CONTAINER_USER}:${CONTAINER_USER} ${HIVE_HOME}
 
 USER ${CONTAINER_USER}
 
