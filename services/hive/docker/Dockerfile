@@ -16,20 +16,17 @@ ENV PATH ${HIVE_HOME}/bin:$PATH
 # Set hive metastore database type
 ENV HIVE_DB_TYPE=${HIVE_DB_TYPE}
 
-USER root
+USER ${CONTAINER_USER}
 
 COPY --chown=1000:1000 --from=hive-base /opt/hive $HIVE_HOME
 COPY --chown=1000:1000 --from=hive-base /usr/local/bin/startup.sh /usr/local/bin/startup.sh
 COPY --chown=1000:1000 --from=hive-base /usr/local/bin/entrypoint.sh /usr/local/bin/entrypoint.sh
 
-RUN set -e && \
-    wget --quiet "https://jdbc.postgresql.org/download/postgresql-${PSQL_JDBC_VERSION}.jar" \
-      -P ${HIVE_HOME}/lib/ && \
-    wget --quiet "https://downloads.mariadb.com/Connectors/java/connector-java-${MYSQL_JDBC_VERSION}/mariadb-java-client-${MYSQL_JDBC_VERSION}.jar" \
-      -P ${HIVE_HOME}/lib/ &&\
-    chown -R ${CONTAINER_USER}:${CONTAINER_USER} ${HIVE_HOME}
-
-USER ${CONTAINER_USER}
+RUN set -ex && \
+    cd ${HIVE_HOME}/lib/ && \
+    wget --quiet "https://jdbc.postgresql.org/download/postgresql-${PSQL_JDBC_VERSION}.jar" && \
+    wget --quiet "https://downloads.mariadb.com/Connectors/java/connector-java-${MYSQL_JDBC_VERSION}/mariadb-java-client-${MYSQL_JDBC_VERSION}.jar" && \
+    cd ${HIVE_HOME}
 
 ENTRYPOINT [ "entrypoint.sh" ]
 
