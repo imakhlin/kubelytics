@@ -6,6 +6,7 @@ DOCKER_IMAGES = \
 	presto \
 	shell \
 	jupyter \
+	hive \
 	mariadb
 
 DOCKER_USER ?= "kubelytics"
@@ -17,6 +18,7 @@ ZEPPELIN_VERSION ?= 0.8.0
 JUPYTER_MINICONDA_VERSION ?= 4.5.12
 JUPYTER_VERSION ?= 0.9.4
 PRESTO_VERSION ?= 0.206
+HIVE_VERSION ?= 2.3.2
 MARIADB_VERSION ?= 10.4
 TTYD_VERSION ?= 1.4.0
 
@@ -111,13 +113,23 @@ shell:
         --tag $(DOCKER_USER)/shell:$(HADOOP_VERSION)-$(SPARK_VERSION)-$(PRESTO_VERSION) .
 	$(eval READY_IMAGES += $(DOCKER_USER)/shell:$(HADOOP_VERSION)-$(SPARK_VERSION)-$(PRESTO_VERSION))
 
+hive:
+	@echo Building hive image $(DOCKER_USER)/hive:$(HIVE_VERSION)-$(HADOOP_VERSION)
+	@cd hive/docker && \
+	docker build \
+	      --build-arg DOCKER_USER=$(DOCKER_USER) \
+	      --build-arg HADOOP_VERSION=$(HADOOP_VERSION) \
+	      --build-arg HIVE_VERSION=$(HIVE_VERSION) \
+	      --tag $(DOCKER_USER)/hive:$(HIVE_VERSION)-$(HADOOP_VERSION) .
+	$(eval READY_IMAGES += $(DOCKER_USER)/hive:$(HIVE_VERSION)-$(HADOOP_VERSION))
+
 mariadb:
-		@echo Building MariaDB $(DOCKER_USER)/mariadb:$(MARIADB_VERSION)
-		@cd mariadb/docker && \
-		docker build \
-	        --build-arg DOCKER_USER=$(DOCKER_USER) \
-	        --build-arg MARIADB_VERSION=$(MARIADB_VERSION) \
-	        --tag $(DOCKER_USER)/mariadb:$(MARIADB_VERSION) .
-		$(eval READY_IMAGES += $(DOCKER_USER)/mariadb:$(MARIADB_VERSION))
+	@echo Building MariaDB $(DOCKER_USER)/mariadb:$(MARIADB_VERSION)
+	@cd mariadb/docker && \
+	docker build \
+        --build-arg DOCKER_USER=$(DOCKER_USER) \
+        --build-arg MARIADB_VERSION=$(MARIADB_VERSION) \
+        --tag $(DOCKER_USER)/mariadb:$(MARIADB_VERSION) .
+	$(eval READY_IMAGES += $(DOCKER_USER)/mariadb:$(MARIADB_VERSION))
 
 .PHONY: $(DOCKER_IMAGES)

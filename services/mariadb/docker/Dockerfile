@@ -19,17 +19,16 @@ RUN set -ex \
     && apt-get update -q \
     && apt-get install -yq --no-install-recommends curl \
     && chown -R $MARIADB_UID:$MARIADB_GID /home/$MARIADB_UNAME \
-    && mkdir /var/lib/mysql/mysql \
-    && chown -R $MARIADB_UID:$MARIADB_GID /var/lib/mysql/mysql
+    && mkdir -p /var/lib/mysql/mysql \
+    && chown -R $MARIADB_UID:$MARIADB_GID /var/lib/mysql \
+    && chown -R $MARIADB_UID:$MARIADB_GID /usr/lib/mysql/plugin/auth_pam_tool_dir
 
 USER $MARIADB_UID
 
-ARG MYSQL_ROOT_PASSWORD=mysql
+ARG MYSQL_ROOT_PASSWORD=ChangeMe!
 ENV MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
 ENV HOME /home/$MARIADB_UNAME
 
 RUN set -x \
     && echo "alias ll='ls -lhaG'" >> $HOME/.bash_aliases \
-    && . $HOME/.bash_aliases \
-    && ls -la /var/lib/ \
-    && mount
+    && . $HOME/.bash_aliases
