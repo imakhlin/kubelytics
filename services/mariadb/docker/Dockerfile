@@ -18,10 +18,11 @@ RUN set -ex \
     && groupmod -g $MARIADB_GID $MARIADB_UNAME \
     && apt-get update -q \
     && apt-get install -yq --no-install-recommends curl \
+    && mkdir -p /var/lib/mysql/mysql /docker-entrypoint-initdb.d \
     && chown -R $MARIADB_UID:$MARIADB_GID /home/$MARIADB_UNAME \
-    && mkdir -p /var/lib/mysql/mysql \
-    && chown -R $MARIADB_UID:$MARIADB_GID /var/lib/mysql \
-    && chown -R $MARIADB_UID:$MARIADB_GID /usr/lib/mysql/plugin/auth_pam_tool_dir
+      /var/lib/mysql \
+      /etc/mysql \
+      /usr/lib/mysql/plugin/auth_pam_tool_dir
 
 USER $MARIADB_UID
 
