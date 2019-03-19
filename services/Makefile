@@ -114,22 +114,22 @@ shell:
 	$(eval READY_IMAGES += $(DOCKER_REPOSITORY)/shell:$(HADOOP_VERSION)-$(SPARK_VERSION)-$(PRESTO_VERSION))
 
 hive:
-	@echo Building hive image $(DOCKER_USER)/hive:$(HIVE_VERSION)-$(HADOOP_VERSION)
+	@echo Building hive image $(DOCKER_REPOSITORY)/hive:$(HIVE_VERSION)-$(HADOOP_VERSION)
 	@cd hive/docker && \
 	docker build \
-	      --build-arg DOCKER_USER=$(DOCKER_USER) \
+	      --build-arg DOCKER_USER=$(DOCKER_REPOSITORY) \
 	      --build-arg HADOOP_VERSION=$(HADOOP_VERSION) \
 	      --build-arg HIVE_VERSION=$(HIVE_VERSION) \
-	      --tag $(DOCKER_USER)/hive:$(HIVE_VERSION)-$(HADOOP_VERSION) .
-	$(eval READY_IMAGES += $(DOCKER_USER)/hive:$(HIVE_VERSION)-$(HADOOP_VERSION))
+	      --tag $(DOCKER_REPOSITORY)/hive:$(HIVE_VERSION)-$(HADOOP_VERSION) .
+	$(eval READY_IMAGES += $(DOCKER_REPOSITORY)/hive:$(HIVE_VERSION)-$(HADOOP_VERSION))
 
 mariadb:
-	@echo Building MariaDB $(DOCKER_USER)/mariadb:$(MARIADB_VERSION)
+	@echo Building MariaDB $(DOCKER_REPOSITORY)/mariadb:$(MARIADB_VERSION)
 	@cd mariadb/docker && \
 	docker build \
-        --build-arg DOCKER_USER=$(DOCKER_USER) \
+        --build-arg DOCKER_USER=$(DOCKER_REPOSITORY) \
         --build-arg MARIADB_VERSION=$(MARIADB_VERSION) \
-        --tag $(DOCKER_USER)/mariadb:$(MARIADB_VERSION) .
-	$(eval READY_IMAGES += $(DOCKER_USER)/mariadb:$(MARIADB_VERSION))
+        --tag $(DOCKER_REPOSITORY)/mariadb:$(MARIADB_VERSION) .
+	$(eval READY_IMAGES += $(DOCKER_REPOSITORY)/mariadb:$(MARIADB_VERSION))
 
 .PHONY: $(DOCKER_IMAGES)
