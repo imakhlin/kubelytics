@@ -127,7 +127,6 @@ mariadb:
 	@echo Building MariaDB $(DOCKER_REPOSITORY)/mariadb:$(MARIADB_VERSION)
 	@cd mariadb/docker && \
 	docker build \
-        --build-arg DOCKER_USER=$(DOCKER_REPOSITORY) \
         --build-arg MARIADB_VERSION=$(MARIADB_VERSION) \
         --tag $(DOCKER_REPOSITORY)/mariadb:$(MARIADB_VERSION) .
 	$(eval READY_IMAGES += $(DOCKER_REPOSITORY)/mariadb:$(MARIADB_VERSION))

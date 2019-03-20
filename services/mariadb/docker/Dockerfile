@@ -1,4 +1,4 @@
-ARG MARIADB_VERSION=10.4
+ARG MARIADB_VERSION
 
 FROM mariadb:${MARIADB_VERSION}
 
@@ -6,6 +6,10 @@ FROM mariadb:${MARIADB_VERSION}
 ARG MARIADB_UNAME=mysql
 ARG MARIADB_UID=1001
 ARG MARIADB_GID=1001
+
+ARG MYSQL_ROOT_PASSWORD=ChangeMe!
+ENV MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+ENV MARIADB_HOME /home/$MARIADB_UNAME
 
 USER root
 
@@ -26,10 +30,6 @@ RUN set -ex \
 
 USER $MARIADB_UID
 
-ARG MYSQL_ROOT_PASSWORD=ChangeMe!
-ENV MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-ENV HOME /home/$MARIADB_UNAME
-
 RUN set -x \
-    && echo "alias ll='ls -lhaG'" >> $HOME/.bash_aliases \
-    && . $HOME/.bash_aliases
+    && echo "alias ll='ls -lhaG'" >> $MARIADB_HOME/.bash_aliases \
+    && . $MARIADB_HOME/.bash_aliases
