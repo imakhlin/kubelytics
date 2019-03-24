@@ -27,7 +27,3 @@ RUN set -ex \
       /usr/lib/mysql/plugin/auth_pam_tool_dir
 
 USER $MARIADB_UID
-
-RUN set -x \
-    && echo "alias ll='ls -lhaG'" >> $MARIADB_HOME/.bash_aliases \
-    && . $MARIADB_HOME/.bash_aliases
