@@ -23,6 +23,7 @@ COPY --chown=1000:1000 --from=hive-base /usr/local/bin/startup.sh /usr/local/bin
 COPY --chown=1000:1000 --from=hive-base /usr/local/bin/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 RUN set -ex && \
+    sed -i "s/= \"/=\"/g" ${HIVE_HOME}/bin/ext/metastore.sh && \
     cd ${HIVE_HOME}/lib/ && \
     wget --quiet "https://jdbc.postgresql.org/download/postgresql-${PSQL_JDBC_VERSION}.jar" && \
     wget --quiet "https://downloads.mariadb.com/Connectors/java/connector-java-${MYSQL_JDBC_VERSION}/mariadb-java-client-${MYSQL_JDBC_VERSION}.jar" && \
