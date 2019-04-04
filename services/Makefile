@@ -4,10 +4,10 @@ DOCKER_IMAGES = \
 	spark \
 	zeppelin \
 	presto \
-	shell \
-	jupyter \
 	hive \
-	mariadb
+	mariadb \
+	shell \
+	jupyter
 
 DOCKER_REPOSITORY ?= "kubelytics"
 
