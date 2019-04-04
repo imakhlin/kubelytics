@@ -110,6 +110,7 @@ shell:
         --build-arg SPARK_VERSION=$(SPARK_VERSION) \
         --build-arg PRESTO_VERSION=$(PRESTO_VERSION) \
         --build-arg TTYD_VERSION=$(TTYD_VERSION) \
+				--build-arg HIVE_VERSION=$(HIVE_VERSION) \
         --tag $(DOCKER_REPOSITORY)/shell:$(HADOOP_VERSION)-$(SPARK_VERSION)-$(PRESTO_VERSION) .
 	$(eval READY_IMAGES += $(DOCKER_REPOSITORY)/shell:$(HADOOP_VERSION)-$(SPARK_VERSION)-$(PRESTO_VERSION))
 
